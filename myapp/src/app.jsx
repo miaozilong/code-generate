@@ -16,13 +16,14 @@ export const initialStateConfig = {
  * */
 
 export async function getInitialState() {
+  debugger
   const fetchUserInfo = async () => {
-    try {
-      const msg = await queryCurrentUser();
-      return msg.data;
-    } catch (error) {
-      history.push(loginPath);
-    }
+    // try {
+    //   const msg = await queryCurrentUser();
+    //   return msg.data;
+    // } catch (error) {
+    //   history.push(loginPath);
+    // }
 
     return undefined;
   }; // 如果是登录页面，不执行
@@ -43,6 +44,7 @@ export async function getInitialState() {
 } // ProLayout 支持的api https://procomponents.ant.design/components/layout
 
 export const layout = ({ initialState }) => {
+  debugger
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
@@ -53,9 +55,9 @@ export const layout = ({ initialState }) => {
     onPageChange: () => {
       const { location } = history; // 如果没有登录，重定向到 login
 
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
-        history.push(loginPath);
-      }
+      // if (!initialState?.currentUser && location.pathname !== loginPath) {
+      //   history.push(loginPath);
+      // }
     },
     links: isDev
       ? [
