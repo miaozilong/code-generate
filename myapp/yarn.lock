@@ -5364,6 +5364,11 @@ devtools-protocol@0.0.854822:
   resolved "https://registry.nlark.com/devtools-protocol/download/devtools-protocol-0.0.854822.tgz?cache=0&sync_timestamp=1632281077059&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdevtools-protocol%2Fdownload%2Fdevtools-protocol-0.0.854822.tgz#eac3a5260a6b3b4e729a09fdc0c77b0d322e777b"
   integrity sha1-6sOlJgprO05ymgn9wMd7DTIud3s=
 
+dexie@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.nlark.com/dexie/download/dexie-3.0.3.tgz#ede63849dfe5f07e13e99bb72a040e8ac1d29dab"
+  integrity sha1-7eY4Sd/l8H4T6Zu3KgQOisHSnas=
+
 dicer@0.2.5:
   version "0.2.5"
   resolved "https://registry.nlark.com/dicer/download/dicer-0.2.5.tgz#5996c086bb33218c812c090bddc09cd12facb70f"

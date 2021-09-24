@@ -1,32 +1,58 @@
-import {LockOutlined, UserOutlined} from '@ant-design/icons';
-import {Button, Form, Input} from 'antd';
+import {Button, Form, Input, Space, Table, Tag} from 'antd';
 import React, {useRef, useState} from 'react';
-import {FormattedMessage, useIntl} from 'umi';
 import {PageContainer} from '@ant-design/pro-layout';
-import { Table, Tag, Space } from 'antd';
+import Dexie from 'dexie';
 
 const TableList = () => {
-  /**
-   * @en-US Pop-up window of new window
-   * @zh-CN 新建窗口的弹窗
-   *  */
-  const [createModalVisible, handleModalVisible] = useState(false);
-  /**
-   * @en-US The pop-up window of the distribution update window
-   * @zh-CN 分布更新窗口的弹窗
-   * */
-
-  const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  const [showDetail, setShowDetail] = useState(false);
-  const actionRef = useRef();
-  const [currentRow, setCurrentRow] = useState();
-  const [selectedRowsState, setSelectedRows] = useState([]);
   const [form] = Form.useForm();
-
-  const intl = useIntl();
   const onFinish = (values) => {
     console.log('Finish:', values);
   };
+  const onClickAdd = () => {
+    console.log('点击新增按钮');
+    alert('add')
+    var db = new Dexie('hellodb');
+    db.version(1).stores({
+      tasks: '++id,date,description,done'
+    });
+
+    async function test() {
+      var id = await db.tasks.put({date: Date.now(), description: 'Test Dexie', done: 0});
+      console.log("Got id " + id);
+      // Now lets add a bunch of tasks
+      await db.tasks.bulkPut([
+        {date: Date.now(), description: 'Test Dexie bulkPut()', done: 1},
+        {date: Date.now(), description: 'Finish testing Dexie bulkPut()', done: 1}
+      ]);
+      // Ok, so let's query it
+
+      var tasks = await db.tasks.where('done').above(0).toArray();
+      console.log("Completed tasks: " + JSON.stringify(tasks, 0, 2));
+
+      // Ok, so let's complete the 'Test Dexie' task.
+      await db.tasks
+        .where('description')
+        .startsWithIgnoreCase('test dexi')
+        .modify({done: 1});
+
+      console.log ("All tasks should be completed now.");
+      console.log ("Now let's delete all old tasks:");
+
+      // And let's remove all old tasks:
+      await db.tasks
+        .where('date')
+        .below(Date.now())
+        .delete();
+
+      console.log ("Done.");
+    }
+
+    test().catch (err => {
+      console.error ("Uh oh! " + err.stack);
+    });
+  };
+
+
   const columns = [
     {
       title: 'Name',
@@ -101,36 +127,39 @@ const TableList = () => {
   ];
   return (
     <PageContainer>
-      <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
-        <Form.Item
-          name="materialCode"
-        >
-          <Input placeholder="请输入物料号" />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
+      <Space direction="vertical" size={'large'}>
+        <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
+          <Form.Item
+            name="materialCode"
           >
-            搜索
-          </Button>
-        </Form.Item>
-        <Form.Item>
-          <Button
-            htmlType="reset"
-          >
-            重置
-          </Button>
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="link"
-          >
-            新增
-          </Button>
-        </Form.Item>
-      </Form>
-      <Table columns={columns} dataSource={data} />
+            <Input placeholder="请输入物料号"/>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+            >
+              搜索
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              htmlType="reset"
+            >
+              重置
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="link"
+              onClick={onClickAdd}
+            >
+              新增
+            </Button>
+          </Form.Item>
+        </Form>
+        <Table columns={columns} dataSource={data} pagination={false}/>
+      </Space>
     </PageContainer>
   );
 };

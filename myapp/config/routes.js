@@ -54,12 +54,6 @@ export default [
     component: './materialList',
   },
   {
-    name: '新增规则',
-    icon: 'edit',
-    path: '/addRule',
-    component: './addRule',
-  },
-  {
     name: '物料序列号导出历史',
     icon: 'smile',
     path: '/seqExport',

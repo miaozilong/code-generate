@@ -16,7 +16,6 @@ export const initialStateConfig = {
  * */
 
 export async function getInitialState() {
-  debugger
   const fetchUserInfo = async () => {
     // try {
     //   const msg = await queryCurrentUser();
@@ -44,7 +43,6 @@ export async function getInitialState() {
 } // ProLayout 支持的api https://procomponents.ant.design/components/layout
 
 export const layout = ({ initialState }) => {
-  debugger
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
