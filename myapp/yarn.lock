@@ -5364,6 +5364,16 @@ devtools-protocol@0.0.854822:
   resolved "https://registry.nlark.com/devtools-protocol/download/devtools-protocol-0.0.854822.tgz?cache=0&sync_timestamp=1632281077059&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdevtools-protocol%2Fdownload%2Fdevtools-protocol-0.0.854822.tgz#eac3a5260a6b3b4e729a09fdc0c77b0d322e777b"
   integrity sha1-6sOlJgprO05ymgn9wMd7DTIud3s=
 
+dexie-observable@^3.0.0-beta.10:
+  version "3.0.0-beta.11"
+  resolved "https://registry.npmmirror.com/dexie-observable/download/dexie-observable-3.0.0-beta.11.tgz#2ab39e81f0fd2a8a040e014279d07b4c13c9100f"
+  integrity sha1-KrOegfD9KooEDgFCedB7TBPJEA8=
+
+dexie-react-hooks@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.nlark.com/dexie-react-hooks/download/dexie-react-hooks-1.0.7.tgz#50316a7829a6dfa013b8471f66b010cc77f00d3e"
+  integrity sha1-UDFqeCmm36ATuEcfZrAQzHfwDT4=
+
 dexie@^3.0.3:
   version "3.0.3"
   resolved "https://registry.nlark.com/dexie/download/dexie-3.0.3.tgz#ede63849dfe5f07e13e99bb72a040e8ac1d29dab"
@@ -6088,7 +6098,7 @@ eslint-visitor-keys@^2.0.0, eslint-visitor-keys@^2.1.0:
   resolved "https://registry.nlark.com/eslint-visitor-keys/download/eslint-visitor-keys-2.1.0.tgz#f65328259305927392c938ed44eb0a5c9b2bd303"
   integrity sha1-9lMoJZMFknOSyTjtROsKXJsr0wM=
 
-eslint@^7.1.0, eslint@^7.11.0, eslint@^7.18.0, eslint@^7.7.0:
+eslint@^7.1.0, eslint@^7.11.0, eslint@^7.14.0, eslint@^7.18.0, eslint@^7.7.0:
   version "7.32.0"
   resolved "https://registry.nlark.com/eslint/download/eslint-7.32.0.tgz?cache=0&sync_timestamp=1631312108443&other_urls=https%3A%2F%2Fregistry.nlark.com%2Feslint%2Fdownload%2Feslint-7.32.0.tgz#c6d328a14be3fb08c8d1d21e12c02fdb7a2a812d"
   integrity sha1-xtMooUvj+wjI0dIeEsAv23oqgS0=
@@ -10042,7 +10052,7 @@ nanocolors@^0.1.5:
   resolved "https://registry.nlark.com/nanocolors/download/nanocolors-0.1.6.tgz#bc2350d3edfdbfadd7ac018c855ae7c13905a6ad"
   integrity sha1-vCNQ0+39v63XrAGMhVrnwTkFpq0=
 
-nanoid@^3.1.25:
+nanoid@^3.1.20, nanoid@^3.1.25:
   version "3.1.25"
   resolved "https://registry.nlark.com/nanoid/download/nanoid-3.1.25.tgz?cache=0&sync_timestamp=1628771925127&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fnanoid%2Fdownload%2Fnanoid-3.1.25.tgz#09ca32747c0e543f0e1814b7d3793477f9c8e152"
   integrity sha1-CcoydHwOVD8OGBS303k0d/nI4VI=
@@ -15266,6 +15276,17 @@ url@^0.11.0, url@~0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
+use-dexie@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.npmmirror.com/use-dexie/download/use-dexie-1.2.2.tgz#42a2c0973cec2c0c467aee45844195a46342dbb1"
+  integrity sha1-QqLAlzzsLAxGeu5FhEGVpGNC27E=
+  dependencies:
+    dexie "^3.0.3"
+    dexie-observable "^3.0.0-beta.10"
+    eslint "^7.14.0"
+    lodash.isequal "^4.5.0"
+    nanoid "^3.1.20"
+
 use-json-comparison@^1.0.3, use-json-comparison@^1.0.5:
   version "1.0.6"
   resolved "https://registry.nlark.com/use-json-comparison/download/use-json-comparison-1.0.6.tgz?cache=0&sync_timestamp=1622793869054&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fuse-json-comparison%2Fdownload%2Fuse-json-comparison-1.0.6.tgz#a012bbc258ce745db1f56745dc653f575226cb21"
@@ -15797,6 +15818,11 @@ yauzl@^2.10.0:
   dependencies:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.1.0"
+
+yux-storage@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.npmmirror.com/yux-storage/download/yux-storage-1.1.4.tgz#6d368b3542efcb49025590022a74f213a4a2399a"
+  integrity sha1-bTaLNULvy0kCVZACKnTyE6SiOZo=
 
 zenscroll@^4.0.2:
   version "4.0.2"

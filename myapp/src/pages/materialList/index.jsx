@@ -1,57 +1,22 @@
 import {Button, Form, Input, Space, Table, Tag} from 'antd';
 import React, {useRef, useState} from 'react';
 import {PageContainer} from '@ant-design/pro-layout';
-import Dexie from 'dexie';
+import yuxStorage from 'yux-storage';
+
 
 const TableList = () => {
   const [form] = Form.useForm();
   const onFinish = (values) => {
     console.log('Finish:', values);
   };
-  const onClickAdd = () => {
-    console.log('点击新增按钮');
-    alert('add')
-    var db = new Dexie('hellodb');
-    db.version(1).stores({
-      tasks: '++id,date,description,done'
-    });
 
-    async function test() {
-      var id = await db.tasks.put({date: Date.now(), description: 'Test Dexie', done: 0});
-      console.log("Got id " + id);
-      // Now lets add a bunch of tasks
-      await db.tasks.bulkPut([
-        {date: Date.now(), description: 'Test Dexie bulkPut()', done: 1},
-        {date: Date.now(), description: 'Finish testing Dexie bulkPut()', done: 1}
-      ]);
-      // Ok, so let's query it
-
-      var tasks = await db.tasks.where('done').above(0).toArray();
-      console.log("Completed tasks: " + JSON.stringify(tasks, 0, 2));
-
-      // Ok, so let's complete the 'Test Dexie' task.
-      await db.tasks
-        .where('description')
-        .startsWithIgnoreCase('test dexi')
-        .modify({done: 1});
-
-      console.log ("All tasks should be completed now.");
-      console.log ("Now let's delete all old tasks:");
-
-      // And let's remove all old tasks:
-      await db.tasks
-        .where('date')
-        .below(Date.now())
-        .delete();
-
-      console.log ("Done.");
-    }
-
-    test().catch (err => {
-      console.error ("Uh oh! " + err.stack);
-    });
-  };
-
+  const onClickAddBtn=()=>{
+    alert('hello world')
+    yuxStorage.setItem('key','hello world 2').then(async ()=>{
+      let item =await yuxStorage.getItem('key');
+      alert(item)
+    })
+  }
 
   const columns = [
     {
@@ -152,7 +117,7 @@ const TableList = () => {
           <Form.Item>
             <Button
               type="link"
-              onClick={onClickAdd}
+              onClick={onClickAddBtn}
             >
               新增
             </Button>
