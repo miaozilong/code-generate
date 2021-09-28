@@ -1,0 +1,32 @@
+create table generate_history
+(
+	file_id integer comment '文件ID', // 不要了
+	file_name text
+	material_code text comment '物料编码',
+	rule_code text comment '规则编码'
+);
+
+create table generate_history_file
+(
+	material_code text comment '物料编码',
+	file_name text comment '文件名',
+	generate_time timestamp comment '生成时间',
+	generate_count integer comment '数量'
+);
+
+create table material
+(
+	code text comment '编码',
+	generated_count integer comment '已生成数量',  // 不要了
+	rule text comment '规则', // 不要了
+	rule_serial text comment '产品系列',
+	rule_year text comment '年份',
+	rule_month text comment '月份',
+	rule_day text comment '日期',
+	rule_seq_count text comment '流水号数字个数',
+	rule_seq_last integer comment '最后一个流水号' default 0
+);
+
+create unique index material_code_uindex
+	on material (code);
+

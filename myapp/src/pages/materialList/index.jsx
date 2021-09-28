@@ -1,132 +1,149 @@
-import {Button, Form, Input, Space, Table, Tag} from 'antd';
-import React, {useRef, useState} from 'react';
+import {Button, Form, Input, Select, Space, Table} from 'antd';
+import React, {useEffect, useState} from 'react';
 import {PageContainer} from '@ant-design/pro-layout';
+import AddForm from "./AddForm";
+import GenerateNumberModal from "./GenerateNumberModal";
+import config from './config';
 import yuxStorage from 'yux-storage';
 
+const {Option} = Select;
 
 const TableList = () => {
-  const [form] = Form.useForm();
-  const onFinish = (values) => {
-    console.log('Finish:', values);
-  };
+    const [form] = Form.useForm();
+    const [addModalShow, setAddModalShow] = useState(false);
+    const [generateModalShow, setGenerateModalShow] = useState(false);
+    const [formConfirmLoading, setFormConfirmLoading] = useState(false);
+    const [tableLoading, setTableLoading] = useState(false);
+    const [tableData, setTableData] = useState([]);
+    const [pendGenerateMaterial, setPendGenerateMaterial] = useState('');
 
-  const onClickAddBtn=()=>{
-    alert('hello world')
-    yuxStorage.setItem('key','hello world 2').then(async ()=>{
-      let item =await yuxStorage.getItem('key');
-      alert(item)
-    })
-  }
+    useEffect(() => {
+      loadData()
+    }, []);
 
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: text => <a>{text}</a>,
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: tags => (
-        <>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
+    const loadData = async () => {
+      debugger
+      setTableLoading(true)
+      let material = await yuxStorage.getItem(config.materialTableName);
+      if (material) {
+        material = material.map(v => ({key: v.code, ...v}))
+        setTableData(material)
+      } else {
+        setTableData([])
+      }
+      setTableLoading(false)
+    }
+
+    const onFinish = (values) => {
+      loadData()
+    };
+
+
+    const onClickAddBtn = () => {
+      setAddModalShow(true)
+    }
+    const onCloseAddModal = () => {
+      setAddModalShow(false)
+      loadData()
+    }
+    const onCloseGenerateModal = () => {
+      setGenerateModalShow(false)
+      loadData()
+    }
+
+    // 点击生成按钮
+    const onClickGenerate = data => {
+      setPendGenerateMaterial(data);
+      setGenerateModalShow(true)
+    }
+
+    const columns = [
+      {
+        title: '物料号',
+        key: 'code',
+        render: data => <a>{data.code}</a>
+      },
+      {
+        title: '规则',
+        key: 'rule',
+        render: data => {
+          let ret = '';
+          if (data.rule_serial_check) {
+            ret = ret.concat(data.rule_serial)
+          }
+          if (data.rule_year_check) {
+            ret = ret.concat(data.rule_year)
+          }
+          if (data.rule_month_check) {
+            ret = ret.concat(data.rule_month)
+          }
+          if (data.rule_day_check) {
+            ret = ret.concat(data.rule_day)
+          }
+          ret = ret.concat('n'.repeat(data.rule_seq_count));
+          return ret
+        },
+      },
+      {
+        title: '已生成数量',
+        key: 'rule_seq_last',
+        align: 'right',
+        render: data => <>{data.rule_seq_last}</>
+      },
+      {
+        title: '操作',
+        key: 'action',
+        render: (data) => (
+          <a onClick={() => onClickGenerate(data)}>生成</a>
+        ),
+      },
+    ];
+
+    return (
+      <PageContainer>
+        <Space direction="vertical" size={'large'}>
+          <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
+            <Form.Item
+              name="materialCode"
+            >
+              <Input placeholder="请输入物料号"/>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+              >
+                搜索
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                htmlType="reset"
+              >
+                重置
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="link"
+                onClick={onClickAddBtn}
+              >
+                新增
+              </Button>
+            </Form.Item>
+          </Form>
+          <Table columns={columns} dataSource={tableData} pagination={false}/>
         </Space>
-      ),
-    },
-  ];
-
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
-  return (
-    <PageContainer>
-      <Space direction="vertical" size={'large'}>
-        <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
-          <Form.Item
-            name="materialCode"
-          >
-            <Input placeholder="请输入物料号"/>
-          </Form.Item>
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-            >
-              搜索
-            </Button>
-          </Form.Item>
-          <Form.Item>
-            <Button
-              htmlType="reset"
-            >
-              重置
-            </Button>
-          </Form.Item>
-          <Form.Item>
-            <Button
-              type="link"
-              onClick={onClickAddBtn}
-            >
-              新增
-            </Button>
-          </Form.Item>
-        </Form>
-        <Table columns={columns} dataSource={data} pagination={false}/>
-      </Space>
-    </PageContainer>
-  );
-};
+        {
+          addModalShow && (<AddForm onCloseModal={onCloseAddModal}></AddForm>)
+        }
+        {
+          generateModalShow && (<GenerateNumberModal material={pendGenerateMaterial}
+                                                     onCloseModal={onCloseGenerateModal}></GenerateNumberModal>)
+        }
+      </PageContainer>
+    );
+  }
+;
 
 export default TableList;
