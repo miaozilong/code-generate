@@ -1,7 +1,7 @@
 import {Form, Input, message, Modal, Select} from 'antd';
 import React, {useState} from 'react';
 import yuxStorage from 'yux-storage';
-import config from './config'
+import config from '../config'
 import moment from 'moment';
 
 const {Option} = Select;
@@ -11,8 +11,6 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
   const [formConfirmLoading, setFormConfirmLoading] = useState(false);
 
   const handleCancel = () => {
-    console.log(material)
-    debugger
     onCloseModal()
   }
   // 点击表单的确定按钮
@@ -42,7 +40,7 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
             rule_code: getCode(material, i),
           })
         }
-        let materialListData = await yuxStorage.getItem(config.materialTableName);
+        let materialListData = await yuxStorage.getItem(config.materialTableName) || [];
         for (let v of materialListData) {
           if (v.code = material.code) {
             v.rule_seq_last += generateCount
@@ -73,7 +71,7 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
           return Math.pow(10, material.rule_seq_count) - 1 - material.rule_seq_last
         }
 
-        let oldHistroyData = await yuxStorage.getItem(config.historyTableName);
+        let oldHistroyData = await yuxStorage.getItem(config.historyTableName) || [];
         await yuxStorage.setItem(config.historyTableName, [...(oldHistroyData || []), ...generateValue]);
 
         let fileData = {
@@ -82,9 +80,8 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
           generate_time: now.format('YYYY/MM/DD HH:mm:ss'),
           generate_count: generateCount
         }
-        let oldFileListData = await yuxStorage.getItem(config.fileTableName);
+        let oldFileListData = await yuxStorage.getItem(config.fileTableName) || [];
         let newFileTableData = [...(oldFileListData || []), fileData];
-        debugger
         await yuxStorage.setItem(config.fileTableName, newFileTableData);
         onCloseModal()
         message.success('保存成功')

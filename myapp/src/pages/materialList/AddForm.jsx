@@ -1,7 +1,7 @@
 import {Checkbox, Form, Input, message, Modal, Select} from 'antd';
 import React, {useState} from 'react';
 import yuxStorage from 'yux-storage';
-import config from './config'
+import config from '../config'
 
 const {Option} = Select;
 
@@ -20,7 +20,7 @@ const AddForm = ({onCloseModal}) => {
       const values = await form.validateFields()
       setFormConfirmLoading(true)
       try {
-        const material = await yuxStorage.getItem(config.materialTableName)
+        const material = await yuxStorage.getItem(config.materialTableName) || []
         if (material && material.some(v => v.code === values.code)) {
           failReason = '物料编码重复';
           throw Error()
