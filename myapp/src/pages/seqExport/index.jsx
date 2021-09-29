@@ -58,7 +58,6 @@ const TableList = () => {
     })
   }
 
-  // todo 文件名后缀
   const columns = [
     {
       title: '文件名',
@@ -85,6 +84,7 @@ const TableList = () => {
     {
       title: '操作',
       key: 'action',
+      align: 'center',
       render: (data) => (
         <a onClick={() => onClickDownload(data)}>下载</a>
       ),
@@ -93,7 +93,7 @@ const TableList = () => {
 
     return (
       <PageContainer>
-        <Space direction="vertical" size={'large'}>
+        <Space style={{width: '100%'}} direction="vertical" size={'large'}>
           <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
             <Form.Item name="code" initialValue={code}>
               <Input placeholder="请输入物料号"/>

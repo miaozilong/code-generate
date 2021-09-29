@@ -1,12 +1,10 @@
-import {Button, Form, Input, Select, Space, Table} from 'antd';
+import {Button, Form, Input, Space, Table} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useModel} from 'umi';
 import {PageContainer} from '@ant-design/pro-layout';
 import AddForm from "./AddForm";
 import GenerateNumberModal from "./GenerateNumberModal";
 import {materialTableName} from '../../config'
-
-const {Option} = Select;
 
 const TableList = () => {
   const {initialState: {db}} = useModel('@@initialState');
@@ -95,6 +93,7 @@ const TableList = () => {
       {
         title: '操作',
         key: 'action',
+        align: 'center',
         render: (data) => (
           <a onClick={() => onClickGenerate(data)}>生成</a>
         ),
@@ -103,7 +102,7 @@ const TableList = () => {
 
     return (
       <PageContainer>
-        <Space direction="vertical" size={'large'}>
+        <Space style={{width: '100%'}} direction="vertical" size={'large'}>
           <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
             <Form.Item
               name="code"
@@ -134,7 +133,7 @@ const TableList = () => {
               </Button>
             </Form.Item>
           </Form>
-          <Table columns={columns} dataSource={tableData} pagination={false}/>
+          <Table loading={tableLoading} columns={columns} dataSource={tableData} pagination={false}/>
         </Space>
         {
           addModalShow && (<AddForm onCloseModal={onCloseAddModal}></AddForm>)
