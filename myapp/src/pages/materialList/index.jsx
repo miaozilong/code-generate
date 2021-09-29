@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {PageContainer} from '@ant-design/pro-layout';
 import AddForm from "./AddForm";
 import GenerateNumberModal from "./GenerateNumberModal";
-import config from '../config';
+import {materialTableName, historyTableName, fileTableName} from '../../config'
 import yuxStorage from 'yux-storage';
 
 const {Option} = Select;
@@ -23,7 +23,7 @@ const TableList = () => {
 
     const loadData = async () => {
       setTableLoading(true)
-      let material = await yuxStorage.getItem(config.materialTableName) || [];
+      let material = await yuxStorage.getItem(materialTableName) || [];
       if (material) {
         material = material.map(v => ({key: v.code, ...v}))
         setTableData(material)

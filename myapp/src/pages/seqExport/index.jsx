@@ -1,7 +1,7 @@
 import {Button, Form, Input, Select, Space, Table} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {PageContainer} from '@ant-design/pro-layout';
-import config from '../config';
+import {materialTableName, historyTableName, fileTableName} from '../../config'
 import yuxStorage from 'yux-storage';
 
 const {Option} = Select;
@@ -17,7 +17,7 @@ const TableList = () => {
 
     const loadData = async () => {
       setTableLoading(true)
-      let fileData = await yuxStorage.getItem(config.fileTableName) || [];
+      let fileData = await yuxStorage.getItem(fileTableName) || [];
       fileData = fileData.map(v => ({key: v.file_name, ...v}))
       setTableData(fileData)
       setTableLoading(false)

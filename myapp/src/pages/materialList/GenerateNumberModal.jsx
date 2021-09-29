@@ -1,8 +1,9 @@
 import {Form, Input, message, Modal, Select} from 'antd';
 import React, {useState} from 'react';
 import yuxStorage from 'yux-storage';
-import config from '../config'
+import {materialTableName, historyTableName, fileTableName} from '../../config'
 import moment from 'moment';
+import _ from 'lodash';
 
 const {Option} = Select;
 
@@ -40,13 +41,13 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
             rule_code: getCode(material, i),
           })
         }
-        let materialListData = await yuxStorage.getItem(config.materialTableName) || [];
+        let materialListData = await yuxStorage.getItem(materialTableName) || [];
         for (let v of materialListData) {
           if (v.code = material.code) {
             v.rule_seq_last += generateCount
           }
         }
-        await yuxStorage.setItem(config.materialTableName, materialListData);
+        await yuxStorage.setItem(materialTableName, materialListData);
 
         function getCode(material, seq) {
           let ret = '';
@@ -71,8 +72,8 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
           return Math.pow(10, material.rule_seq_count) - 1 - material.rule_seq_last
         }
 
-        let oldHistroyData = await yuxStorage.getItem(config.historyTableName) || [];
-        await yuxStorage.setItem(config.historyTableName, [...(oldHistroyData || []), ...generateValue]);
+        let oldHistroyData = await yuxStorage.getItem(historyTableName) || [];
+        await yuxStorage.setItem(historyTableName, [...(oldHistroyData || []), ...generateValue]);
 
         let fileData = {
           material_code: material.code,
@@ -80,9 +81,9 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
           generate_time: now.format('YYYY/MM/DD HH:mm:ss'),
           generate_count: generateCount
         }
-        let oldFileListData = await yuxStorage.getItem(config.fileTableName) || [];
+        let oldFileListData = await yuxStorage.getItem(fileTableName) || [];
         let newFileTableData = [...(oldFileListData || []), fileData];
-        await yuxStorage.setItem(config.fileTableName, newFileTableData);
+        await yuxStorage.setItem(fileTableName, newFileTableData);
         onCloseModal()
         message.success('保存成功')
       } catch (e) {
