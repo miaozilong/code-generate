@@ -68,7 +68,6 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
         function getMaxCodeLeft(material) {
           return Math.pow(10, material.rule_seq_count) - 1 - material.rule_seq_last
         }
-
         await DB[historyTableName].bulkPut(generateValue)
         let fileData = {
           material_code: material.code,

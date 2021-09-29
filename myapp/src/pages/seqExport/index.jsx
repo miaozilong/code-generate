@@ -1,11 +1,10 @@
-import {Button, Form, Input, Select, Space, Table} from 'antd';
+import {Button, Form, Input, Space, Table} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {PageContainer} from '@ant-design/pro-layout';
 import {history, useModel} from 'umi';
-import {fileTableName} from '../../config'
+import {fileTableName, historyTableName} from '@/config'
 import _ from 'lodash';
-
-const {Option} = Select;
+import xlsx, {utils} from 'xlsx';
 
 const TableList = () => {
   const {initialState: {db}} = useModel('@@initialState');
@@ -21,7 +20,7 @@ const TableList = () => {
   const loadData = async (code) => {
     setTableLoading(true)
     const DB = await db;
-    let fileData = [];
+    let fileData;
     if (code) {
       fileData = await DB[fileTableName].filter(v => _.includes(v.material_code, code)).toArray();
     } else {
@@ -32,9 +31,21 @@ const TableList = () => {
     setTableLoading(false)
   }
 
-  const onClickDownload = (data) => {
-
-
+  const onClickDownload = async (data) => {
+    var filename = data.file_name + ".xlsx";
+    const DB = await db;
+    let historyGenerateData = await DB[historyTableName].where('file_name').equals(data.file_name).toArray();
+    historyGenerateData = historyGenerateData.map(v => ({物料编号: v.material_code, 规则编号: v.rule_code}))
+    var ws = utils.json_to_sheet(historyGenerateData);
+    var ws_name = "SheetJS";
+    if (typeof console !== 'undefined') console.log(new Date());
+    var wb = utils.book_new();
+    /* add worksheet to workbook */
+    utils.book_append_sheet(wb, ws, ws_name);
+    /* write workbook */
+    if (typeof console !== 'undefined') console.log(new Date());
+    xlsx.writeFile(wb, filename);
+    if (typeof console !== 'undefined') console.log(new Date());
   }
 
   const onFinish = ({code}) => {
@@ -52,7 +63,7 @@ const TableList = () => {
     {
       title: '文件名',
       key: 'file_name',
-      render: data => <>{data.file_name}</>
+      render: data => <>{`${data.file_name}.xlsx`}</>
     },
     {
       title: '物料号',
@@ -69,16 +80,16 @@ const TableList = () => {
       title: '数量',
       key: 'generate_count',
       align: 'right',
-        render: data => <>{data.generate_count}</>
-      },
-      {
-        title: '操作',
-        key: 'action',
-        render: (data) => (
-          <a onClick={() => onClickDownload(data)}>下载</a>
-        ),
-      },
-    ];
+      render: data => <>{data.generate_count}</>
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (data) => (
+        <a onClick={() => onClickDownload(data)}>下载</a>
+      ),
+    },
+  ];
 
     return (
       <PageContainer>
@@ -103,7 +114,7 @@ const TableList = () => {
               </Button>
             </Form.Item>
           </Form>
-          <Table columns={columns} dataSource={tableData} pagination={false}/>
+          <Table loading={tableLoading} columns={columns} dataSource={tableData} pagination={false}/>
         </Space>
       </PageContainer>
     );

@@ -83,8 +83,8 @@ async function initDb() {
   const db = new Dexie('generateStore');
   db.version(1).stores({
     [materialTableName]: 'code,rule_serial,rule_year,rule_month,rule_day,rule_seq_count,rule_seq_last',
-    [historyTableName]: 'file_name,material_code,rule_code',
-    [fileTableName]: 'material_code,file_name,generate_time,generate_count',
+    [historyTableName]: '++id,file_name,material_code,rule_code',
+    [fileTableName]: '++id,material_code,file_name,generate_time,generate_count',
     seq: '++id'
   });
   db.seq.put({})
