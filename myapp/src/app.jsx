@@ -3,8 +3,9 @@ import {history, Link} from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import {BookOutlined, LinkOutlined} from '@ant-design/icons';
-import {materialTableName, historyTableName, fileTableName} from './config'
+import {fileTableName, historyTableName, materialTableName} from './config'
 import Dexie from 'dexie';
+
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -19,7 +20,7 @@ export const initialStateConfig = {
  * */
 
 export async function getInitialState() {
-  let idbOpenDBRequest = initDb();
+  let db = initDb();
   const fetchUserInfo = async () => {
     // try {
     //   const msg = await queryCurrentUser();
@@ -40,7 +41,7 @@ export async function getInitialState() {
   return {
     fetchUserInfo,
     settings: {},
-    idbOpenDBRequest
+    db
   };
 } // ProLayout 支持的api https://procomponents.ant.design/components/layout
 
@@ -78,24 +79,14 @@ export const layout = ({initialState}) => {
   };
 };
 
-function initDb() {
-  // // 创建数据库
-  // let idbOpenDBRequest = window.indexedDB.open('generate_code');
-  // idbOpenDBRequest.onerror = function (event) {
-  //   message.error('创建数据库失败');
-  //   return
-  // };
-  // let tableNames = [materialTableName, historyTableName, fileTableName];
-  // for (let tableName of tableNames) {
-  //   if (!idbOpenDBRequest.objectStoreNames.contains(tableName)) {
-  //     idbOpenDBRequest.createObjectStore(tableName);
-  //   }
-  // }
-  // return idbOpenDBRequest
-
-
-  const db = new Dexie('myDb');
+async function initDb() {
+  const db = new Dexie('generateStore');
   db.version(1).stores({
-    friends: `name, age`
+    [materialTableName]: 'code,rule_serial,rule_year,rule_month,rule_day,rule_seq_count,rule_seq_last',
+    [historyTableName]: 'file_name,material_code,rule_code',
+    [fileTableName]: 'material_code,file_name,generate_time,generate_count',
+    seq: '++id'
   });
+  db.seq.put({})
+  return db;
 }

@@ -1,15 +1,16 @@
 import {Button, Form, Input, Select, Space, Table} from 'antd';
 import React, {useEffect, useState} from 'react';
+import {useModel} from 'umi';
 import {PageContainer} from '@ant-design/pro-layout';
 import AddForm from "./AddForm";
 import GenerateNumberModal from "./GenerateNumberModal";
-import {materialTableName, historyTableName, fileTableName} from '../../config'
-import yuxStorage from 'yux-storage';
+import {materialTableName} from '../../config'
 
 const {Option} = Select;
 
 const TableList = () => {
-    const [form] = Form.useForm();
+  const {initialState: {db}} = useModel('@@initialState');
+  const [form] = Form.useForm();
     const [addModalShow, setAddModalShow] = useState(false);
     const [generateModalShow, setGenerateModalShow] = useState(false);
     const [formConfirmLoading, setFormConfirmLoading] = useState(false);
@@ -21,30 +22,32 @@ const TableList = () => {
       loadData()
     }, []);
 
-    const loadData = async () => {
-      setTableLoading(true)
-      let material = await yuxStorage.getItem(materialTableName) || [];
-      if (material) {
-        material = material.map(v => ({key: v.code, ...v}))
-        setTableData(material)
-      } else {
-        setTableData([])
-      }
-      setTableLoading(false)
+  const loadData = async (code) => {
+    setTableLoading(true)
+    const DB = await db;
+    let material = []
+    if (code) {
+      material = await DB[materialTableName].filter(v => _.includes(v.code, code)).toArray();
+    } else {
+      material = await DB[materialTableName].toArray();
     }
+    material = material.map(v => ({key: v.code, ...v}))
+    setTableData(material)
+    setTableLoading(false)
+  }
 
-    const onFinish = (values) => {
-      loadData()
-    };
+  const onFinish = ({code}) => {
+    loadData(code)
+  };
 
 
-    const onClickAddBtn = () => {
-      setAddModalShow(true)
-    }
-    const onCloseAddModal = () => {
-      setAddModalShow(false)
-      loadData()
-    }
+  const onClickAddBtn = () => {
+    setAddModalShow(true)
+  }
+  const onCloseAddModal = () => {
+    setAddModalShow(false)
+    loadData()
+  }
     const onCloseGenerateModal = () => {
       setGenerateModalShow(false)
       loadData()
@@ -103,7 +106,7 @@ const TableList = () => {
         <Space direction="vertical" size={'large'}>
           <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
             <Form.Item
-              name="materialCode"
+              name="code"
             >
               <Input placeholder="请输入物料号"/>
             </Form.Item>

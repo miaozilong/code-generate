@@ -1,34 +1,34 @@
 import {Checkbox, Form, Input, message, Modal, Select} from 'antd';
 import React, {useState} from 'react';
-import yuxStorage from 'yux-storage';
+import {useModel} from 'umi';
 import {materialTableName} from '../../config'
+
 
 const {Option} = Select;
 
 const AddForm = ({onCloseModal}) => {
+  const {initialState: {db}} = useModel('@@initialState');
   const [form] = Form.useForm();
   const [formConfirmLoading, setFormConfirmLoading] = useState(false);
-
   const handleCancel = () => {
     onCloseModal()
   }
   // 点击表单的确定按钮
   const handleOk = async () => {
-    // await yuxStorage.setItem('material')
     let failReason = ''
     try {
       const values = await form.validateFields()
       setFormConfirmLoading(true)
       try {
-        const material = await yuxStorage.getItem(materialTableName) || []
+        const DB = await db;
+        let material = await DB[materialTableName].toArray();
         if (material && material.some(v => v.code === values.code)) {
           failReason = '物料编码重复';
           throw Error()
         }
-        await yuxStorage.setItem(materialTableName,
-          [...(material || []), {...values, rule_seq_last: 0,}]);
-        onCloseModal()
+        DB[materialTableName].put({...values, rule_seq_last: 0,})
         message.success('保存成功')
+        onCloseModal()
       } catch (e) {
         console.log(e)
         message.error('保存失败 ' + failReason);

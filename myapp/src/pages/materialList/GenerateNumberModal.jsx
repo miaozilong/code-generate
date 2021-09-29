@@ -1,13 +1,14 @@
 import {Form, Input, message, Modal, Select} from 'antd';
 import React, {useState} from 'react';
-import yuxStorage from 'yux-storage';
-import {materialTableName, historyTableName, fileTableName} from '../../config'
+import {fileTableName, historyTableName, materialTableName} from '../../config'
 import moment from 'moment';
 import _ from 'lodash';
+import {history, useModel} from 'umi';
 
 const {Option} = Select;
 
 const GenerateNumberModal = ({onCloseModal, material}) => {
+  const {initialState: {db}} = useModel('@@initialState');
   const [form] = Form.useForm();
   const [formConfirmLoading, setFormConfirmLoading] = useState(false);
 
@@ -16,6 +17,7 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
   }
   // 点击表单的确定按钮
   const handleOk = async () => {
+    const DB = await db;
     let failReason = ''
     try {
       const values = await form.validateFields()
@@ -36,18 +38,13 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
         let generateCount = _.toNumber(values.count);
         for (let i = 1; i <= generateCount; i++) {
           generateValue.push({
-            fileName,
+            file_name: fileName,
             material_code: material.code,
             rule_code: getCode(material, i),
           })
         }
-        let materialListData = await yuxStorage.getItem(materialTableName) || [];
-        for (let v of materialListData) {
-          if (v.code = material.code) {
-            v.rule_seq_last += generateCount
-          }
-        }
-        await yuxStorage.setItem(materialTableName, materialListData);
+        await DB[materialTableName].where('code').equals(material.code)
+          .modify({rule_seq_last: material.rule_seq_last + generateCount});
 
         function getCode(material, seq) {
           let ret = '';
@@ -72,23 +69,25 @@ const GenerateNumberModal = ({onCloseModal, material}) => {
           return Math.pow(10, material.rule_seq_count) - 1 - material.rule_seq_last
         }
 
-        let oldHistroyData = await yuxStorage.getItem(historyTableName) || [];
-        await yuxStorage.setItem(historyTableName, [...(oldHistroyData || []), ...generateValue]);
-
+        await DB[historyTableName].bulkPut(generateValue)
         let fileData = {
           material_code: material.code,
           file_name: fileName,
           generate_time: now.format('YYYY/MM/DD HH:mm:ss'),
           generate_count: generateCount
         }
-        let oldFileListData = await yuxStorage.getItem(fileTableName) || [];
-        let newFileTableData = [...(oldFileListData || []), fileData];
-        await yuxStorage.setItem(fileTableName, newFileTableData);
+        await DB[fileTableName].put(fileData)
         onCloseModal()
-        message.success('保存成功')
+        message.success('生成成功')
+        history.push({
+          pathname: '/seqExport',
+          query: {
+            code: material.code,
+          },
+        });
       } catch (e) {
         console.log(e)
-        message.error('保存失败 ' + failReason);
+        message.error('生成失败 ' + failReason);
       } finally {
         setFormConfirmLoading(false)
       }
