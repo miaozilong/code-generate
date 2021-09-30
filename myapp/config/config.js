@@ -68,4 +68,8 @@ export default defineConfig({
   mfsu: {},
   webpack5: {},
   exportStatic: {},
+  // 添加一行，ant 默认是histroy路由，作用：打包出来后资源找不到(巨坑)
+  history: { type: 'hash' },
+  publicPath: './',
+  outputPath:'ant'
 });

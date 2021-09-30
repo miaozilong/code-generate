@@ -1,11 +1,12 @@
-const {app, BrowserWindow, globalShortcut} = require('electron')
+const {app, BrowserWindow, globalShortcut,Menu} = require('electron')
 const path = require('path')
 
 function createWindow () {
+  Menu.setApplicationMenu(null)
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1366,
+    height: 768,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     },
@@ -15,10 +16,10 @@ function createWindow () {
   })
 
   // 加载应用----react 打包
-  // mainWindow.loadURL(path.join('file://', __dirname, 'ant/index.html'))
+  mainWindow.loadURL(path.join('file://', __dirname, 'ant/index.html'))
 
   // 加载应用----适用于 react 开发时项目
-  mainWindow.loadURL('http://localhost:8000/');
+  // mainWindow.loadURL('http://localhost:8000/');
 
   // 打开调试.
   // mainWindow.webContents.openDevTools()
