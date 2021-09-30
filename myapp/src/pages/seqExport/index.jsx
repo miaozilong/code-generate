@@ -22,9 +22,9 @@ const TableList = () => {
     const DB = await db;
     let fileData;
     if (code) {
-      fileData = await DB[fileTableName].filter(v => _.includes(v.material_code, code)).toArray();
+      fileData = await DB[fileTableName].orderBy('id').desc().filter(v => _.includes(v.material_code, code)).toArray();
     } else {
-      fileData = await DB[fileTableName].toArray();
+      fileData = await DB[fileTableName].orderBy('id').desc().toArray();
     }
     fileData = fileData.map(v => ({key: v.file_name, ...v}))
     setTableData(fileData)

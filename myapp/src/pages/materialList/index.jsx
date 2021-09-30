@@ -25,9 +25,9 @@ const TableList = () => {
     const DB = await db;
     let material = []
     if (code) {
-      material = await DB[materialTableName].filter(v => _.includes(v.code, code)).toArray();
+      material = await DB[materialTableName].orderBy('id').desc().filter(v => _.includes(v.code, code)).toArray();
     } else {
-      material = await DB[materialTableName].toArray();
+      material = await DB[materialTableName].orderBy('id').desc().toArray();
     }
     material = material.map(v => ({key: v.code, ...v}))
     setTableData(material)

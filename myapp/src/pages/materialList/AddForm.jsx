@@ -56,7 +56,17 @@ const AddForm = ({onCloseModal}) => {
           name="code"
           labelCol={{span: 8}}
           wrapperCol={{span: 12}}
-          rules={[{required: true, message: '请输入物料号'}]}
+          rules={[
+            {required: true, message: '请输入物料号'},
+            ({getFieldValue}) => ({
+              validator(rule, value) {
+                if (!/^\w+$/.test(value)) {
+                  return Promise.reject(new Error('由数字、英文或者下划线组成'));
+                }
+                return Promise.resolve();
+              },
+            }),
+          ]}
         >
           <Input placeholder={'请输入物料号'}/>
         </Form.Item>
@@ -86,6 +96,14 @@ const AddForm = ({onCloseModal}) => {
                 validator(rule, value) {
                   if (!value && getFieldValue('rule_serial_check')) {
                     return Promise.reject(new Error('勾选产品系列后必填'));
+                  }
+                  return Promise.resolve();
+                },
+              }),
+              ({getFieldValue}) => ({
+                validator(rule, value) {
+                  if (!/^\w+$/.test(value)) {
+                    return Promise.reject(new Error('由数字、英文或者下划线组成'));
                   }
                   return Promise.resolve();
                 },
