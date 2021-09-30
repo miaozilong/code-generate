@@ -57,11 +57,19 @@ const TableList = () => {
       setGenerateModalShow(true)
     }
 
+  const onClickReset = () => {
+    let emptyCode = '';
+    form.setFieldsValue({
+      code: emptyCode
+    })
+    loadData(emptyCode)
+  }
+
     const columns = [
       {
         title: '物料号',
         key: 'code',
-        render: data => <a>{data.code}</a>
+        render: data => <>{data.code}</>
       },
       {
         title: '规则',
@@ -119,7 +127,7 @@ const TableList = () => {
             </Form.Item>
             <Form.Item>
               <Button
-                htmlType="reset"
+                onClick={onClickReset}
               >
                 重置
               </Button>

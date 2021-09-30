@@ -15906,11 +15906,6 @@ yauzl@^2.10.0:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.1.0"
 
-yux-storage@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.npmmirror.com/yux-storage/download/yux-storage-1.1.4.tgz#6d368b3542efcb49025590022a74f213a4a2399a"
-  integrity sha1-bTaLNULvy0kCVZACKnTyE6SiOZo=
-
 zenscroll@^4.0.2:
   version "4.0.2"
   resolved "https://registry.npm.taobao.org/zenscroll/download/zenscroll-4.0.2.tgz#e8d5774d1c0738a47bcfa8729f3712e2deddeb25"

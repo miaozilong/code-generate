@@ -53,9 +53,11 @@ const TableList = () => {
   };
 
   const onClickReset = () => {
+    let emptyCode = '';
     form.setFieldsValue({
-      code: ''
+      code: emptyCode
     })
+    loadData(emptyCode)
   }
 
   const columns = [
