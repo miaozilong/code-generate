@@ -115,7 +115,7 @@ const TableList = () => {
             <Form.Item
               name="code"
             >
-              <Input placeholder="请输入物料号"/>
+              <Input placeholder="请输入物料号" autocomplete="off" />
             </Form.Item>
             <Form.Item>
               <Button

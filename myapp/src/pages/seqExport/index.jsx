@@ -98,7 +98,7 @@ const TableList = () => {
         <Space style={{width: '100%'}} direction="vertical" size={'large'}>
           <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
             <Form.Item name="code" initialValue={code}>
-              <Input placeholder="请输入物料号"/>
+              <Input placeholder="请输入物料号" autocomplete="off" />
             </Form.Item>
             <Form.Item>
               <Button
