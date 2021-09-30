@@ -44,6 +44,7 @@ const TableList = () => {
     }
     const onCloseAddModal = () => {
       setAddModalShow(false)
+      loadData(form.getFieldValue('code'))
     }
     const onCloseGenerateModal = () => {
       setGenerateModalShow(false)
