@@ -7,8 +7,8 @@ import GenerateNumberModal from "./GenerateNumberModal";
 import {materialTableName} from '../../config'
 
 const TableList = () => {
-  const {initialState: {db}} = useModel('@@initialState');
-  const [form] = Form.useForm();
+    const {initialState: {db}} = useModel('@@initialState');
+    const [form] = Form.useForm();
     const [addModalShow, setAddModalShow] = useState(false);
     const [generateModalShow, setGenerateModalShow] = useState(false);
     const [formConfirmLoading, setFormConfirmLoading] = useState(false);
@@ -20,35 +20,33 @@ const TableList = () => {
       loadData()
     }, []);
 
-  const loadData = async (code) => {
-    setTableLoading(true)
-    const DB = await db;
-    let material = []
-    if (code) {
-      material = await DB[materialTableName].orderBy('id').desc().filter(v => _.includes(v.code, code)).toArray();
-    } else {
-      material = await DB[materialTableName].orderBy('id').desc().toArray();
+    const loadData = async (code) => {
+      setTableLoading(true)
+      const DB = await db;
+      let material = []
+      if (code) {
+        material = await DB[materialTableName].orderBy('id').desc().filter(v => _.includes(v.code, code)).toArray();
+      } else {
+        material = await DB[materialTableName].orderBy('id').desc().toArray();
+      }
+      material = material.map(v => ({key: v.code, ...v}))
+      setTableData(material)
+      setTableLoading(false)
     }
-    material = material.map(v => ({key: v.code, ...v}))
-    setTableData(material)
-    setTableLoading(false)
-  }
 
-  const onFinish = ({code}) => {
-    loadData(code)
-  };
+    const onFinish = ({code}) => {
+      loadData(code)
+    };
 
 
-  const onClickAddBtn = () => {
-    setAddModalShow(true)
-  }
-  const onCloseAddModal = () => {
-    setAddModalShow(false)
-    loadData()
-  }
+    const onClickAddBtn = () => {
+      setAddModalShow(true)
+    }
+    const onCloseAddModal = () => {
+      setAddModalShow(false)
+    }
     const onCloseGenerateModal = () => {
       setGenerateModalShow(false)
-      loadData()
     }
 
     // 点击生成按钮
@@ -57,13 +55,13 @@ const TableList = () => {
       setGenerateModalShow(true)
     }
 
-  const onClickReset = () => {
-    let emptyCode = '';
-    form.setFieldsValue({
-      code: emptyCode
-    })
-    loadData(emptyCode)
-  }
+    const onClickReset = () => {
+      let emptyCode = '';
+      form.setFieldsValue({
+        code: emptyCode
+      })
+      loadData(emptyCode)
+    }
 
     const columns = [
       {
@@ -115,7 +113,7 @@ const TableList = () => {
             <Form.Item
               name="code"
             >
-              <Input placeholder="请输入物料号" autocomplete="off" />
+              <Input placeholder="请输入物料号" autocomplete="off"/>
             </Form.Item>
             <Form.Item>
               <Button
