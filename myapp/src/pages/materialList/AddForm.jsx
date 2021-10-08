@@ -76,7 +76,7 @@ const AddForm = ({onCloseModal}) => {
           labelCol={{span: 8}}
           wrapperCol={{span: 12}}
           style={{marginBottom: 0}}
-       />
+        />
         <Form.Item style={{marginBottom: 0}}>
           <Form.Item name="rule_serial_check" valuePropName="checked"
                      style={{
@@ -90,8 +90,9 @@ const AddForm = ({onCloseModal}) => {
           <Form.Item
             name="rule_serial"
             style={{display: 'inline-block'}}
+            initialValue={(serialData[0].serial)[0].name}
           >
-            <Select defaultValue={serialData[0].serial[0].name} style={{width: 183}}>
+            <Select style={{width: 183}}>
               {
                 serialData.map(v => (
                   <OptGroup label={v.type} key={v.type}>
