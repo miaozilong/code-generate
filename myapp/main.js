@@ -1,4 +1,4 @@
-const {app, BrowserWindow, globalShortcut,Menu} = require('electron')
+const {app, BrowserWindow, Menu} = require('electron')
 const path = require('path')
 
 function createWindow () {
@@ -16,7 +16,7 @@ function createWindow () {
   })
 
   // 加载应用----react 打包
-  mainWindow.loadURL(path.join('file://', __dirname, 'ant/index.html'))
+  mainWindow.loadURL(path.join('file://', __dirname, 'antDist/index.html'))
 
   // 加载应用----适用于 react 开发时项目
   // mainWindow.loadURL('http://localhost:8000/');

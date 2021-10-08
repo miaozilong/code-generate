@@ -1,10 +1,9 @@
 import {Checkbox, Form, Input, message, Modal, Select} from 'antd';
 import React, {useState} from 'react';
 import {useModel} from 'umi';
-import {materialTableName} from '../../config'
+import {materialTableName, serialData} from '@/config'
 
-
-const {Option} = Select;
+const {Option, OptGroup} = Select;
 
 const AddForm = ({onCloseModal}) => {
   const {initialState: {db}} = useModel('@@initialState');
@@ -58,7 +57,7 @@ const AddForm = ({onCloseModal}) => {
           wrapperCol={{span: 12}}
           rules={[
             {required: true, message: '请输入物料号'},
-            ({getFieldValue}) => ({
+            () => ({
               validator(rule, value) {
                 if (!/^\w+$/.test(value)) {
                   return Promise.reject(new Error('由数字、英文或者下划线组成'));
@@ -77,8 +76,7 @@ const AddForm = ({onCloseModal}) => {
           labelCol={{span: 8}}
           wrapperCol={{span: 12}}
           style={{marginBottom: 0}}
-        >
-        </Form.Item>
+       />
         <Form.Item style={{marginBottom: 0}}>
           <Form.Item name="rule_serial_check" valuePropName="checked"
                      style={{
@@ -91,27 +89,21 @@ const AddForm = ({onCloseModal}) => {
           </Form.Item>
           <Form.Item
             name="rule_serial"
-            rules={[
-              ({getFieldValue}) => ({
-                validator(rule, value) {
-                  if (!value && getFieldValue('rule_serial_check')) {
-                    return Promise.reject(new Error('勾选产品系列后必填'));
-                  }
-                  return Promise.resolve();
-                },
-              }),
-              ({getFieldValue}) => ({
-                validator(rule, value) {
-                  if (!/^\w+$/.test(value)) {
-                    return Promise.reject(new Error('由数字、英文或者下划线组成'));
-                  }
-                  return Promise.resolve();
-                },
-              }),
-            ]}
             style={{display: 'inline-block'}}
           >
-            <Input placeholder={'请输入产品系列'}/>
+            <Select defaultValue={serialData[0].serial[0].name} style={{width: 183}}>
+              {
+                serialData.map(v => (
+                  <OptGroup label={v.type} key={v.type}>
+                    {
+                      v.serial.map(s => (
+                        <Option key={s.name} value={s.name}>{`${s.name}:${s.desc}`}</Option>
+                      ))
+                    }
+                  </OptGroup>
+                ))
+              }
+            </Select>
           </Form.Item>
         </Form.Item>
         <Form.Item style={{marginBottom: 0}}>
